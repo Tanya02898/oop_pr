@@ -20,3 +20,17 @@
 ![](images/Image14.jpg)
 ![](images/Image15.jpg)
 ![](images/Image16.jpg)
+
+## **3 Завдання**
+![](images/Image20.jpg)
+![](images/Image21.jpg)
+![](images/Image22.jpg)
+![](images/Image23.jpg)
+![](images/Image25.jpg)
+![](images/Image26.jpg)
+![](images/Image24.jpg)
+![](images/Image27.jpg)
+![](images/Image28.jpg)
+![](images/Image29.jpg)
+![](images/Image30.jpg)
+![](images/31.jpg)
