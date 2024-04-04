@@ -34,3 +34,19 @@
 ![](images/Image29.jpg)
 ![](images/Image30.jpg)
 ![](images/31.jpg)
+
+
+## **4 Завдання**
+![](images/Image32.jpg)
+![](images/Image33.jpg)
+![](images/Image36.jpg)
+![](images/Image34.jpg)
+![](images/Image35.jpg)
+
+![](images/Image39.jpg)
+![](images/Image4.jpg)
+![](images/Image40.jpg)
+![](images/Image41.jpg)
+![](images/Image42.jpg)
+![](images/Image43.jpg)
+![](images/Image44.jpg)
