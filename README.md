@@ -1053,3 +1053,306 @@ public class Test {
 ![](images/5.3.jpg)
 ![](images/5.4.jpg)
 ![](images/5.5.jpg)
+
+## **6 Завдання**
+```java
+package domain;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class Calculation {
+    public String toBinary(int number) {
+        return Integer.toBinaryString(number);
+    }
+
+    public String toOctal(int number) {
+        return Integer.toOctalString(number);
+    }
+
+    public String toHexadecimal(int number) {
+        return Integer.toHexString(number);
+    }
+}
+```
+```java
+package domain;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class CalculationTest {
+
+    public static void main(String[] args) {
+        SolutionFinder solutionFinder = new SolutionFinder();
+        Calculation calculation = new Calculation();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        int currentNumber = 0;
+        int previousNumber = 0;
+        String binary = "";
+        String octal = "";
+        String hexadecimal = "";
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+
+        while (true) {
+            System.out.println("___________________________________________________________");
+            System.out.println("МENU:");
+            System.out.println("1. Ввести кількість чисел.");
+            System.out.println("2. Відобразити представлення в різних системах числення.");
+            System.out.println("3. Зберегти результат.");
+            System.out.println("4. Відновити результат.");
+            System.out.println("5. Нове введення числа.");
+            System.out.println("6. Скасувати останнє введення.");
+            System.out.println("7. Вийти.");
+            System.out.println("___________________________________________________________");
+            System.out.println("Виберіть опцію: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    previousNumber = currentNumber;
+                    currentNumber = solutionFinder.findSolution();
+                    break;
+                case 2:
+                    if (currentNumber != 0) {
+                        displayRepresentations(currentNumber, calculation);
+                    } else {
+                        System.out.println("Спочатку введіть кількість чисел.");
+                    }
+                    break;
+                case 3:
+                    saveResults(currentNumber, calculation);
+                    System.out.println("Результат збережено.");
+                    break;
+                case 4:
+                    restoreResults(calculation);
+                    break;
+                case 5:
+                    previousNumber = currentNumber;
+                    currentNumber = solutionFinder.findSolution();
+                    break;
+                case 6:
+                    currentNumber = previousNumber;
+                    previousNumber = 0;
+                    System.out.println("Останнє введення скасовано.");
+                    break;
+                case 7:
+                    System.out.println("Програма завершує роботу.");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Некоректний вибір. Спробуйте ще раз.");
+            }
+        }
+    }
+
+    private static void displayRepresentations(int currentNumber, Calculation calculation) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        for (int i = 0; i < currentNumber; i++) {
+            int randomNum = (int) (Math.random() * 1000);
+            min = Math.min(min, randomNum);
+            max = Math.max(max, randomNum);
+            sum += randomNum;
+            String binary = calculation.toBinary(randomNum);
+            String octal = calculation.toOctal(randomNum);
+            String hexadecimal = calculation.toHexadecimal(randomNum);
+            System.out.println("Представлення в різних системах числення числа " + randomNum + ":");
+            System.out.println("┌────────────────┬────────────────┬────────────────┐");
+            System.out.println("│   Двійкове     │   Вісімкове    │ Шістнадцяткове │");
+            System.out.println("├────────────────┼────────────────┼────────────────┤");
+            System.out.printf("│ %-14s │ %-14s │ %-14s │\n", binary, octal, hexadecimal);
+            System.out.println("└────────────────┴────────────────┴────────────────┘");
+        }
+        System.out.println("Мінімальне число в таблицях: " + min);
+        System.out.println("Максимальне число в таблицях: " + max);
+        System.out.println("Середнє арифметичне чисел з таблиць: " + (double) sum / currentNumber);
+        System.out.println("Сума чисел: " + sum);
+    }
+
+    private static void saveResults(int number, Calculation calculation) {
+        try (PrintWriter writer = new PrintWriter("results.txt")) {
+            writer.println(number);
+            for (int i = 0; i < number; i++) {
+                int randomNum = (int) (Math.random() * 1000);
+                writer.println(randomNum);
+                writer.println(calculation.toBinary(randomNum));
+                writer.println(calculation.toOctal(randomNum));
+                writer.println(calculation.toHexadecimal(randomNum));
+            }
+        } catch (IOException e) {
+            System.err.println("Помилка при збереженні результатів: " + e.getMessage());
+        }
+    }
+
+    private static void restoreResults(Calculation calculation) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("results.txt"))) {
+            int number = Integer.parseInt(reader.readLine());
+            displayRepresentations(number, calculation);
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Помилка при відновленні результатів: " + e.getMessage());
+        }
+    }
+}
+
+```
+```java
+package domain;
+
+import java.util.Scanner;
+
+public class Demonstration {
+
+    public static void main(String[] args) {
+        Calculation calculation = new Calculation();
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            while (true) {
+                System.out.println("Введіть кількість чисел: ");
+                int count = scanner.nextInt();
+                int min = Integer.MAX_VALUE;
+                int max = Integer.MIN_VALUE;
+                int sum = 0;
+                for (int i = 0; i < count; i++) {
+                    int number = (int) (Math.random() * 1000); 
+                    String binary = calculation.toBinary(number);
+                    String octal = calculation.toOctal(number);
+                    String hexadecimal = calculation.toHexadecimal(number);
+
+                    System.out.println("Представлення в різних системах числення числа " + number + ":");
+                    System.out.println("┌────────────────┬────────────────┬────────────────┐");
+                    System.out.println("│   Двійкове     │   Вісімкове    │ Шістнадцяткове │");
+                    System.out.println("├────────────────┼────────────────┼────────────────┤");
+                    System.out.printf("│ %-14s │ %-14s │ %-14s │\n", binary, octal, hexadecimal);
+                    System.out.println("└────────────────┴────────────────┴────────────────┘");
+
+                    min = Math.min(min, number);
+                    max = Math.max(max, number);
+                    sum += number;
+                }
+                System.out.println("Мінімальне число в таблицях: " + min);
+                System.out.println("Максимальне число в таблицях: " + max);
+                System.out.println("Середне арифметичне чисел з таблиць: " + (double) sum / count);
+                System.out.println("Сума чисел: " + sum);
+            }
+        } finally {
+            scanner.close(); 
+        }
+    }
+}
+
+```
+```java
+package domain;
+
+import java.util.Scanner;
+
+public class SolutionFinder {
+    private Scanner scanner = new Scanner(System.in);
+
+    public int findSolution() {
+        System.out.println("Введіть кількість чисел: ");
+        int number = scanner.nextInt();
+        return number;
+    }
+}
+```
+```java
+package domain;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+
+public class ProgramTest {
+    private final InputStream systemIn = System.in;
+    private final PrintStream systemOut = System.out;
+
+    private ByteArrayInputStream testIn;
+    private ByteArrayOutputStream testOut;
+
+    public void setUpOutput() {
+        testOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(testOut));
+    }
+
+    private void provideInput(String data) {
+        testIn = new ByteArrayInputStream(data.getBytes());
+        System.setIn(testIn);
+    }
+
+    private String getOutput() {
+        return testOut.toString();
+    }
+
+    public void restoreSystemInputOutput() {
+        System.setIn(systemIn);
+        System.setOut(systemOut);
+    }
+
+    public boolean testProgram() {
+        // Simulate user input
+        provideInput("3\n1\n");
+
+        // Expected output
+        String expectedOutput = "Введіть кількість чисел: \n" +
+                "Представлення в різних системах числення числа 236:\n" +
+                "┌────────────────┬────────────────┬────────────────┐\n" +
+                "│   Двійкове     │   Вісімкове    │ Шістнадцяткове │\n" +
+                "├────────────────┼────────────────┼────────────────┤\n" +
+                "│ 11101100       │ 354            │ EC             │\n" +
+                "└────────────────┴────────────────┴────────────────┘\n" +
+                "Мінімальне число в таблицях: 236\n" +
+                "Максимальне число в таблицях: 236\n" +
+                "Середнє арифметичне чисел з таблиць: 236.0\n" +
+                "Сума чисел: 236\n";
+
+        // Check if the actual output matches the expected output
+        String actualOutput;
+        try {
+            CalculationTest.main(null);
+            actualOutput = getOutput();
+        } catch (Exception e) {
+            actualOutput = e.toString();
+        }
+
+        boolean testPassed = actualOutput.equals(expectedOutput);
+        if (testPassed) {
+            System.out.println("Тест пройдений успішно. Програма працює коректно.");
+        } else {
+            System.out.println("Тест не пройдений. Програма працює некоректно.");
+        }
+        return testPassed;
+    }
+}
+
+```
+```java
+package test.Test6;
+
+import domain.ProgramTest;
+
+public class ProgramTestRunner {
+    public static void main(String[] args) {
+        ProgramTest test = new ProgramTest();
+        if (test.testProgram()) {
+            System.out.println("Програма працює коректно.");
+        } else {
+            System.out.println("Програма працює некоректно.");
+        }
+    }
+}
+```
+![](images/6.1.jpg)
+![](images/6.2.jpg)
+![](images/6.3.jpg)
+![](images/6.4.jpg)
+![](images/6.5.jpg)
+![](images/6.6.jpg)
+![](images/6.7.jpg)
