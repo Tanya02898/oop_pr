@@ -316,7 +316,6 @@ public class Test {
         int testNumber = 42;
 
         try {
-            // Test calculation methods without specific input values
             calculation.toBinary(testNumber);
             calculation.toOctal(testNumber);
             calculation.toHexadecimal(testNumber);
@@ -330,7 +329,6 @@ public class Test {
         String[] testResults = {"101010", "52", "2A"};
 
         try {
-            // Test serialization and deserialization without specific values
             SerializationManager.serializeResults(testResults);
             SerializationManager.deserializeResults();
             return true;
