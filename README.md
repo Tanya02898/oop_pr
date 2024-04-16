@@ -1350,6 +1350,8 @@ public class ProgramTestRunner {
 ![](images/6.5.jpg)
 ![](images/6.6.jpg)
 ![](images/6.7.jpg)
+
+## **6 Завдання**
 ```java
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -1519,3 +1521,10 @@ public class MainFrame extends JFrame {
     }
 }
 ```
+![](images/7.1.jpg)
+![](images/7.2.jpg)
+![](images/7.3.jpg)
+![](images/7.4.jpg)
+![](images/7.5.jpg)
+![](images/7.6.jpg)
+![](images/7.7.jpg)
