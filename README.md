@@ -1295,10 +1295,7 @@ public class ProgramTest {
     }
 
     public boolean testProgram() {
-        // Simulate user input
         provideInput("3\n1\n");
-
-        // Expected output
         String expectedOutput = "Введіть кількість чисел: \n" +
                 "Представлення в різних системах числення числа 236:\n" +
                 "┌────────────────┬────────────────┬────────────────┐\n" +
@@ -1311,7 +1308,6 @@ public class ProgramTest {
                 "Середнє арифметичне чисел з таблиць: 236.0\n" +
                 "Сума чисел: 236\n";
 
-        // Check if the actual output matches the expected output
         String actualOutput;
         try {
             CalculationTest.main(null);
@@ -1354,3 +1350,172 @@ public class ProgramTestRunner {
 ![](images/6.5.jpg)
 ![](images/6.6.jpg)
 ![](images/6.7.jpg)
+```java
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class MainFrame extends JFrame {
+    private JTextField textField1;
+    private JButton Button1;
+    private JButton Button2;
+    private JButton Button3;
+    private JButton Button4;
+    private JButton Button5;
+    private JLabel Lable1;
+    private JLabel lable;
+    private JPanel mainbunner;
+    private JTable table1;
+    private DefaultTableModel model;
+    private List<String> savedDataLines;
+
+    public MainFrame() {
+        setContentPane(mainbunner);
+        setTitle("МЕНЮ");
+        setSize(690, 110);
+        setVisible(true);
+        savedDataLines = new ArrayList<>();
+        Button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String inputText = textField1.getText();
+                int number = Integer.parseInt(inputText);
+                JOptionPane.showMessageDialog(null, "Число " + number + " введено.");
+            }
+        });
+        Button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String inputText = textField1.getText();
+                try {
+                    int count = Integer.parseInt(inputText);
+                    if (count >= 1 && count <= 500) {
+                        generateAndDisplayTables(count);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Введіть число від 1 до 500.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Введіть коректне число.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        Button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (model != null) {
+                    StringBuilder dataLine = new StringBuilder();
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        for (int j = 0; j < model.getColumnCount(); j++) {
+                            dataLine.append(model.getValueAt(i, j)).append(":");
+                        }
+                        savedDataLines.add(dataLine.toString());
+                        dataLine.setLength(0);
+                    }
+                    saveDataToFile();
+                    JOptionPane.showMessageDialog(null, "Результат збережено.", "Успішно", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Показана таблиця не має даних для збереження.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        Button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadDataFromFile();
+                if (!savedDataLines.isEmpty()) {
+                    model = new DefaultTableModel();
+                    model.addColumn("Число");
+                    model.addColumn("Двійкове");
+                    model.addColumn("Вісімкове");
+                    model.addColumn("Шістнадцяткове");
+                    for (String line : savedDataLines) {
+                        String[] parts = line.split(":");
+                        model.addRow(parts);
+                    }
+                    displaySavedTable();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Немає збережених даних.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        Button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!savedDataLines.isEmpty()) {
+                    savedDataLines.removeLast();
+                    saveDataToFile();
+                    model.setRowCount(0);
+                    JOptionPane.showMessageDialog(null, "Останнє введене число та його таблиця видалені.", "Успішно", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Немає збережених даних для видалення.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+    private void generateAndDisplayTables(int count) {
+        model = new DefaultTableModel();
+        model.addColumn("Число");
+        model.addColumn("Двійкове");
+        model.addColumn("Вісімкове");
+        model.addColumn("Шістнадцяткове");
+        Random random = new Random();
+        for (int i = 0; i < count; i++) {
+            int number = random.nextInt(100) + 1;
+            String binary = Integer.toBinaryString(number);
+            String octal = Integer.toOctalString(number);
+            String hexadecimal = Integer.toHexString(number);
+            model.addRow(new Object[]{number, binary, octal, hexadecimal});
+        }
+        JTable table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(400, 200));
+        table.setFillsViewportHeight(true);
+        JFrame tableFrame = new JFrame();
+        tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        tableFrame.setTitle("Таблиця результатів");
+        tableFrame.add(new JScrollPane(table));
+        tableFrame.pack();
+        tableFrame.setVisible(true);
+    }
+    private void displaySavedTable() {
+        JTable table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(400, 200));
+        table.setFillsViewportHeight(true);
+        JFrame tableFrame = new JFrame();
+        tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        tableFrame.setTitle("Збережені дані");
+        tableFrame.add(new JScrollPane(table));
+        tableFrame.pack();
+        tableFrame.setVisible(true);
+    }
+    private void saveDataToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("saved_data.txt"))) {
+            for (String line : savedDataLines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Помилка при збереженні даних.", "Помилка", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void loadDataFromFile() {
+        savedDataLines.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader("saved_data.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                savedDataLines.add(line);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Помилка при читанні даних з файлу.", "Помилка", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public static void main(String[] args) {
+        MainFrame frame = new MainFrame();
+    }
+}
+```
